@@ -1,7 +1,7 @@
 const express = require("express");
 const app = express();
 const path = require('path');
-// const mongoose = require('mongoose');
+const mongoose = require('mongoose');
 const ejsMate = require('ejs-mate');
 
 app.engine('ejs', ejsMate)
@@ -28,6 +28,14 @@ app.get('/', (req, res) => {
 
 app.get('/search', (req, res) => {
     res.render('info/search')
+});
+
+app.post('/search', (req, res) => {
+    // res.render('info/search')
+    res.send(req.body)
+    // const { password, username } = req.body
+    // res.send(password)
+    // res.send(username)
 });
 
 app.get('/list', (req, res) =>{
