@@ -26,7 +26,7 @@ app.get('/', (req, res) => {
     res.render('welcome')
 });
 
-app.get('/search', (req, res) => {
+app.get('/search', (req, res) => {  
     res.render('info/search')
 });
 

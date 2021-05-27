@@ -2,12 +2,26 @@
 <h1>Search For Vehicle</h1>
 <form action="/search" method="POST">
     <div>
-        <label for="username">Enter Something</label>
-        <input type="text" name="username" id="username" placeholder="username">
+        <label for="Type">Enter Type</label>
+        <input type="text" name="Type" id="Type" placeholder="Type">
     </div>
+
+    <br>
     <div>
-        <label for="password">Enter password:</label>
-        <input type="password" name="password" id="password" placeholder="password">
+        <label for="Model">Enter Model</label>
+        <input type="text" name="Model" id="Model" placeholder="Model">
     </div>
-    <button>Login</button>
+    <br>
+
+    <div>
+      <label for="Year">Enter Year</label>
+      <input type="text" name="Year" id="Year" placeholder="Year">
+    </div>
+    <br>
+    
+    <label for="customRange1" class="form-label">Example range</label>
+    <input type="range" class="form-range" min="5" max="20" id="Range">
+    <br>
+
+    <input class="btn btn-primary" type="submit" value="Submit">
 </form>
