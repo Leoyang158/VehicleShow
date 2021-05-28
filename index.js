@@ -20,6 +20,23 @@ app.use(express.urlencoded({ extended: true }));
 //     'x-rapidapi-host': 'car-data.p.rapidapi.com'
 //   }
 // };
+//
+async function getCars(){
+    fetch("https://car-data.p.rapidapi.com/cars?limit=10&page=0", { // &year=2000
+    "method": "GET",
+    "headers": {
+        "x-rapidapi-key": "20d6c5a99bmsh5f5da4f8b6aa626p101941jsn1c9e0828d976",
+        "x-rapidapi-host": "car-data.p.rapidapi.com"
+    }
+    })
+    .then(response => {
+        console.log(response);
+    })
+    .catch(err => {
+        console.error(err);
+    });
+}
+
 //////////////////////////////
 
 app.get('/', (req, res) => {
