@@ -1,7 +1,7 @@
 const express = require("express");
 const app = express();
 const path = require('path');
-// const mongoose = require('mongoose');
+const mongoose = require('mongoose');
 const ejsMate = require('ejs-mate');
 
 app.engine('ejs', ejsMate)
@@ -26,8 +26,16 @@ app.get('/', (req, res) => {
     res.render('welcome')
 });
 
-app.get('/search', (req, res) => {
-    res.render('info/search')
+app.get('/search', (req, res) => {  
+    res.render('Info/search')
+});
+
+app.post('/search', (req, res) => {
+    // res.render('info/search')
+    res.send(req.body)
+    // const { password, username } = req.body
+    // res.send(password)
+    // res.send(username)
 });
 
 app.get('/list', (req, res) =>{
@@ -40,6 +48,18 @@ app.get('/list', (req, res) =>{
     // });
 })
 
+app.get('/login', (req, res) =>{
+    // res.send("Login")
+    res.render('Info/login')
+})
+
+app.get('/about', (req, res) =>{
+    res.render('Info/about')
+})
+
+app.get('/contact', (req, res) =>{
+    res.render('Info/contact')
+})
 
 app.listen(3000, () => {
     console.log('Serving app on localhost:3000')

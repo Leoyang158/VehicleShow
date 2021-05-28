@@ -1,16 +1,27 @@
 <% layout('layouts/boilerplate')%>
-<form>
-    <div class="mb-3">
-      <label for="exampleInputEmail1" class="form-label"> Year </label>
-      <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+<h1>Search For Vehicle</h1>
+<form action="/search" method="POST">
+    <div>
+        <label for="Type">Enter Type</label>
+        <input type="text" name="Type" id="Type" placeholder="Type">
     </div>
-    <div class="mb-3">
-      <label for="exampleInputPassword1" class="form-label"> Model </label>
-      <input type="password" class="form-control" id="exampleInputPassword1">
+
+    <br>
+    <div>
+        <label for="Model">Enter Model</label>
+        <input type="text" name="Model" id="Model" placeholder="Model">
     </div>
-    <div class="mb-3 form-check">
-      <input type="checkbox" class="form-check-input" id="exampleCheck1">
-      <label class="form-check-label" for="exampleCheck1">Check me out</label>
+    <br>
+
+    <div>
+      <label for="Year">Enter Year</label>
+      <input type="text" name="Year" id="Year" placeholder="Year">
     </div>
-    <button type="submit" class="btn btn-primary">Submit</button>
-  </form>
+    <br>
+    
+    <label for="customRange1" class="form-label">Example range</label>
+    <input type="range" class="form-range" min="5" max="20" id="Range">
+    <br>
+
+    <input class="btn btn-primary" type="submit" value="Submit">
+</form>
