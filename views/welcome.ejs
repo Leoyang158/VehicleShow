@@ -1,20 +1,21 @@
 <% layout('layouts/boilerplate')%>
-<style> 
-    body {
-        background-image: url("https://wallpaperaccess.com/full/229485.jpg");
-        background-color: #cccccc;  
-        height: 100%;
-        background-position: center;
-        background-repeat: no-repeat;
-        background-size:cover;
-    }
-</style>
-<!-- <div class="position-relative"> -->
-    <div class="position-absolute top-0 start-100 translate-middle"> Welcome!
+<!-- <style>
+    .welcome section h3{
         
-    </div>
-    <!-- <p class="fs-1">  </p> -->
-<!-- </div> -->
+    }
+</style>     -->
+
+<main class="welcome">
+    <section class="backImage">
+        <div class="filter"></div>
+            <h3> Welcome to find some new rides</h3>
+            <h3> Let's get ready</h3>
+            <form method="get" action="/search">
+                <button type="submit">Start Searching</button>
+            </form>
+    </section>
+</main>
+
 
     
     

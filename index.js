@@ -27,7 +27,7 @@ app.get('/', (req, res) => {
 });
 
 app.get('/search', (req, res) => {  
-    res.render('info/search')
+    res.render('Info/search')
 });
 
 app.post('/search', (req, res) => {
@@ -48,6 +48,18 @@ app.get('/list', (req, res) =>{
     // });
 })
 
+app.get('/login', (req, res) =>{
+    // res.send("Login")
+    res.render('Info/login')
+})
+
+app.get('/about', (req, res) =>{
+    res.render('Info/about')
+})
+
+app.get('/contact', (req, res) =>{
+    res.render('Info/contact')
+})
 
 app.listen(3000, () => {
     console.log('Serving app on localhost:3000')
