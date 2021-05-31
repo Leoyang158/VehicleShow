@@ -25,42 +25,30 @@ app.set('views', path.join(__dirname, 'views'))
 app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride('_method'));
 
-var axios = require("axios").default;
-var options = {
+// var axios = require("axios");
+// const { response } = require("express");
+// var options = {
+//   method: 'GET',
+//   url: 'https://car-data.p.rapidapi.com/cars',
+//   params: {limit: '10', page: '0'},
+//   headers: {
+//     'x-rapidapi-key': '20d6c5a99bmsh5f5da4f8b6aa626p101941jsn1c9e0828d976',
+//     'x-rapidapi-host': 'car-data.p.rapidapi.com'
+//   }
+// };
+const options = {
   method: 'GET',
   url: 'https://car-data.p.rapidapi.com/cars',
-  params: {limit: '10', page: '0'},
+  qs: {limit: '10', page: '0'},
   headers: {
     'x-rapidapi-key': '20d6c5a99bmsh5f5da4f8b6aa626p101941jsn1c9e0828d976',
-    'x-rapidapi-host': 'car-data.p.rapidapi.com'
+    'x-rapidapi-host': 'car-data.p.rapidapi.com',
+    useQueryString: true
   }
 };
 //
 //////////////////////////////
-const seedDB = async () =>{
-    await Vehicle.deleteMany({});
-    axios.request(options).then(function (response) {
-        const json = response.data;
-        for(let i = 0; i < 10; i++){
-            let vehicle = JSON.parse(json[i]);
-            const ve = new Vehicle({
-                carType: '`${vehicle.type}`'
-            })
-            await ve.save();
-        }
-        // const firstVehicle = response.data[0];
-        // const {id, year, make, model, type} = JSON.parse(firstVehicle);
-        // res.send(id);
-        // res.render('list', vehicleData)
-    }).catch(function (error) {
-        // console.error(error);
-        res.send(error);
-    });
-    // const car = new Vehicle({carType: 'SUV'});
-    // await car.save();
 
-}
-seedDB();
 
 app.get('/', (req, res) => {
     res.render('welcome')
@@ -80,30 +68,30 @@ app.post('/search', (req, res) => {
 
 app.get('/list', async (req, res) =>{
     // fetch api
-    // axios.request(options).then(function (response) {
-    //     // console.log(response.data);
-    //     // const vehicleData = ;
-    //     // const obj = JSON.parse(response.data);
-    //     const firstVehicle = response.data[0];
-    //     const {id, year, make, model, type} = JSON.parse(firstVehicle);
-    //     res.send(id);
-    //     // res.render('list', vehicleData)
-    // }).catch(function (error) {
-    //     // console.error(error);
-    //     res.send(error);
-    // });
-    // const vehicleList = await vehicles.find({});
-    // res.send(vehicleList);
-    // res.render('list', {vehicleList});
-
-    // database
-    ///////
-    // // const vehicle = new Vehicle({carType: 'Honda', modelType: 'Sedan', yearModel: '2014'});
-    // await vehicle.save();
-    // res.send(vehicle);
-    
+    request(options, function (error, response, body) {
+        if (error) throw new Error(error);
+        const cars = JSON.parse(body);
+        // res.render('list', {cars} );
+        const seedDB = async () => {
+            await Vehicle.deleteMany({});
+            for(let car of cars){
+                const vehicle = new Vehicle({
+                    year: `$year`,
+                    make: make,
+                    model: model,
+                    type:  type
+                });
+                await vehicle.save();
+            }
+        }
+        seedDB();
+    });
 })
 
+app.get('list.:id', async (req, res) => {
+    const car = await Vehicle.findById(req.params.id)
+    res.render('show', {car});
+})
 app.get('/login', (req, res) =>{
     // res.send("Login")
     res.render('Info/login')
