@@ -7,6 +7,8 @@ const methodOverride = require('method-override');
 const Vehicle = require('./models/savedCar');
 const request = require('request');
 const { RSA_NO_PADDING } = require("constants");
+const catchAsync = require('./utils/catchAsync')
+const ExpressError = require('./utils/ExpressError');
 
 mongoose.connect('mongodb://localhost:27017/vehicleShow', { 
     useNewUrlParser: true, 
@@ -51,14 +53,19 @@ app.get('/lists/new', (req,res) => {
     res.render('lists/new');
 })
 
-app.post('/lists', async (req, res) => {
-    const newCar = new Vehicle(req.body.list);
-    console.log(newCar);
-    // console.log(newCar._id);
+app.post('/lists', catchAsync(async (req, res, next) => {
+    // try{
+    // const newCar = new Vehicle(req.body.list);
+        // console.log(newCar);
+    // await newCar.save();
     res.redirect('/lists');
+
+    // } catch (e) {
+    //     next(e);
+    // }
     // await newCar.save();
     // res.redirect(`/lists/${newCar._id}`);
-})
+}))
 
 //////////////////////////////////////////////////////
 app.get('/lists/:id', async (req, res) => {
@@ -67,7 +74,7 @@ app.get('/lists/:id', async (req, res) => {
 })
 
 app.get('/lists/:id/edit', async (req, res) => {
-    const car = await Vehicle.findById(req.params.id)
+    const car = await Vehicle.findById(req.params.id);
     res.render('lists/edit', { car });
 })
 
@@ -97,6 +104,16 @@ app.get('/contact', (req, res) =>{
     res.render('Info/contact')
 })
 
+app.all('*', (req, res, next) => {
+    // res.send("404!!!")
+    next(new ExpressError('Page Not Found', 404))
+}) //this page will be presented if above webpage doesn't exist 
+
+app.use((err, req, res, next) => {
+    const {statusCode = 500, message = 'Something went wrong'} = err;
+    res.status(statusCode).render('error', {err})
+    // res.send("Something went wrong");
+})
 app.listen(3000, () => {
     console.log('Serving app on localhost:3000')
 })
