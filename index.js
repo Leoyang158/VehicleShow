@@ -104,6 +104,10 @@ app.get('/contact', (req, res) =>{
     res.render('Info/contact')
 })
 
+app.post('/campgrounds/:id/reviews', catchAsync(async (req, res) => {
+    res.send("You made it");
+}))
+
 app.all('*', (req, res, next) => {
     // res.send("404!!!")
     next(new ExpressError('Page Not Found', 404))
