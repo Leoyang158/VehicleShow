@@ -1,23 +1,25 @@
 <% layout('layouts/boilerplate')%>
-<h1> All Vehicles List </h1>
-<div> 
-    <p class="card-text">Year: <%= car.year %></p>
-    <p class="card-text">Make: <%= car.make %></p>
-    <p class="card-text">Model: <%= car.model %></p>
-    <p class="card-text">Type: <%= car.type %></p> 
-</div>
-<div>
-    <h2> Give A Review </h2>
-    <form action="">
-        <div class="mb-3">
-            <label class="form-label" for="rating">Rating</label>
-            <input classs="form-range" type="range" min="1" max="5" name="review[rating]" id="rating">
+<div class="row">
+    <div class="col-6 offset-3">
+        <div class="card mb-3">
+            <div class="card-body">
+                <h3 class="card-title">Make: <%= car.make %></h3>
+            </div>
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item">Car Model: <%= car.model%></li>
+                <li class="list-group-item">Car Type: <%= car.type%></li>
+                <li class="list-group-item">Car Year: <%= car.year %></li>
+            </ul>
+            <div class="card-body">
+                <a class="card-link btn btn-info" href="/lists/<%=car._id%>/edit">Edit</a>
+                <form class="d-inline" action="/lists/<%=car._id%>?_method=DELETE" method="POST">
+                    <button class="btn btn-danger">Delete</button>
+                </form>
+            </div>
+            <div class="card-footer text-muted">
+                4 days ago
+            </div>
         </div>
-        <div class="mb-3">
-            <label class="form-label" for="body">Review</label>
-            <textarea class="form-control" name="review[body]" id="body" cols="30" rows="3"></textarea>
-        </div>
-        <button class="btn btn-success">Submit</button>
-    </form>
+    </div>
 </div>
 
