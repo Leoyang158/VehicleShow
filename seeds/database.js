@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const Vehicle = require('../models/savedCar');
+const Vehicle = require('../models/vehicle');
 const request = require('request');
 
 mongoose.connect('mongodb://localhost:27017/vehicleShow', {

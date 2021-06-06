@@ -4,6 +4,9 @@ const path = require('path');
 const mongoose = require('mongoose');
 const ejsMate = require('ejs-mate');
 const methodOverride = require('method-override');
+const session = require('express-session');
+const flash = require('connect-flash');
+
 
 //Error Async 
 const catchAsync = require('./utils/catchAsync');
@@ -22,6 +25,7 @@ const about = require('./Routes/about');
 const contact = require('./Routes/contact');
 const login = require('./Routes/login');
 const search = require('./Routes/search');
+const reviews = require('./Routes/reviews');
 
 //connecting to MongoDB 
 mongoose.connect('mongodb://localhost:27017/vehicleShow', { 
@@ -39,12 +43,42 @@ db.once("open", () => {
 });
 
 
+const sessionConfig = {
+    secret: "thisisbetter!",
+    resave: false, // this two lines make session deprecation warning go away 
+    saveUninitalized: true, 
+    cookie: {
+        httpOnly: true,
+        expires: Date.now() + 1000 * 60 * 60 * 24  * 7,
+        maxAge: 1000 * 60 * 60 * 24  * 7 
+    }
+    // we don't want the user to stay forever in our web once they sign in
+}
+
 const app = express();
+
 app.engine('ejs', ejsMate)
+
 app.set('view engine', 'ejs');
+
 app.set('views', path.join(__dirname, 'views'))
-app.use(express.urlencoded({ extended: true }));
+
+app.use(express.urlencoded({ extended: true }))
+
+app.use(express.static('public'))
+
 app.use(methodOverride('_method'));
+
+app.use(session(sessionConfig))
+
+app.use(flash())
+
+app.use((req, res, next) => {
+    res.locals.success = req.flash('success');
+    res.locals.error = req.flash('error')
+    next();
+})
+
 
 //Validating Schema for vehicle 
 const validateVehicle = (req, res, next) => {
@@ -79,27 +113,12 @@ app.use('/about', about)
 
 app.use('/contact', contact)
 
+app.use('/lists/:id/reviews', reviews)
+
 app.get('/', (req, res) => {
     res.render('welcome')
 });
 
-
-
-app.post('/lists/:id/reviews', validateReview, catchAsync(async (req, res) => {
-    const car = await Vehicle.findById(req.params.id);
-    const review = new Review(req.body.review);
-    car.reviews.push(review);
-    await review.save();
-    await car.save();
-    res.redirect(`/lists/${car._id}`);
-}))
-
-app.delete('/lists/:id/reviews/:reviewId', catchAsync(async (req, res) => {
-    const { id, reviewId } = req.params;
-    await Vehicle.findByIdAndUpdate(id, { $pull: { reviews: reviewId } });
-    await Review.findByIdAndDelete(reviewId);
-    res.redirect(`/lists/${id}`);
-}))
 
 //this page will be presented if above webpage doesn't exist 
 app.all('*', (req, res, next) => {
