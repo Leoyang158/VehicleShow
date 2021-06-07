@@ -6,8 +6,9 @@ const ejsMate = require('ejs-mate');
 const methodOverride = require('method-override');
 const session = require('express-session');
 const flash = require('connect-flash');
-
-
+const passport =  require('passport');
+const LocalStrategy = require('passport-local');
+const User = require('./models/user');
 //Error Async 
 const catchAsync = require('./utils/catchAsync');
 const ExpressError = require('./utils/ExpressError');
@@ -20,12 +21,12 @@ const { vehicleSchema, reviewSchema } = require('./schemas.js');
 // const Review = require('./models/review');
 
 //router links e
-const lists = require('./Routes/lists');
-const about = require('./Routes/about');
-const contact = require('./Routes/contact');
-const login = require('./Routes/login');
-const search = require('./Routes/search');
-const reviews = require('./Routes/reviews');
+const listsRoute = require('./Routes/lists');
+const aboutRoute = require('./Routes/about');
+const contactRoute = require('./Routes/contact');
+const usersRoute = require('./Routes/users');
+const searchRoute = require('./Routes/search');
+const reviewsRoute = require('./Routes/reviews');
 
 //connecting to MongoDB 
 mongoose.connect('mongodb://localhost:27017/vehicleShow', { 
@@ -69,9 +70,16 @@ app.use(express.static('public'))
 
 app.use(methodOverride('_method'));
 
-app.use(session(sessionConfig))
-
+app.use(session(sessionConfig)) //making sure it's before the passport session 
 app.use(flash())
+
+//passport middleware (if we want persistent login session)
+app.use(passport.initialize());
+app.use(passport.session());
+passport.use(new LocalStrategy(User.authenticate())); // we want to access the localstragy within the user's model
+passport.serializeUser(User.serializeUser()); //used to store the user in the session 
+passport.deserializeUser(User.deserializeUser());
+
 
 app.use((req, res, next) => {
     res.locals.success = req.flash('success');
@@ -79,7 +87,11 @@ app.use((req, res, next) => {
     next();
 })
 
-
+app.get('/fakeUser', async (req, res) => {
+    const user = new User({ email: 'leo@gmail.com', username: 'leo'})
+    const newUser = await User.register(user, 'lion') //create a password with hashing function to us 
+    res.send(newUser);
+})
 //Validating Schema for vehicle 
 // const validateVehicle = (req, res, next) => {
 //     const { error } = vehicledSchema.validate(req.body);
@@ -103,17 +115,19 @@ app.use((req, res, next) => {
 // }
 
 //app.use different links 
-app.use('/lists', lists)
+app.use('/', usersRoute)
 
-app.use('/search', search)
+app.use('/lists', listsRoute)
 
-app.use('/login', login)
+app.use('/lists/:id/reviews', reviewsRoute)
 
-app.use('/about', about)
+app.use('/search', searchRoute)
 
-app.use('/contact', contact)
+app.use('/about', aboutRoute)
 
-app.use('/lists/:id/reviews', reviews)
+app.use('/contact', contactRoute)
+
+
 
 app.get('/', (req, res) => {
     res.render('welcome')
