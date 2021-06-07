@@ -2,9 +2,10 @@ const Joi = require('joi');
 const { number } = require('joi');
 
 module.exports.vehicleSchema = Joi.object({
-    Vehicle: Joi.object({
+    car: Joi.object({
         year: Joi.number().required().min(0),
         make: Joi.string().required(),
+        model: Joi.string().required(),
         type: Joi.string().required(),
         description: Joi.string().required(),
     }).required()

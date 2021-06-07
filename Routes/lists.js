@@ -40,13 +40,21 @@ router.post('/',  validateVehicle, catchAsync(async (req, res) => {
 // each vehicle has different id
 // each id represents diff of pages 
 router.get('/:id', catchAsync(async (req, res) => {
-    const car = await Vehicle.findById(req.params.id).populate('reviews');;
+    const car = await Vehicle.findById(req.params.id).populate('reviews');
+    if(!car){
+        req.flash('error', 'Cannot find that vehicle');
+        return res.redirect('/lists')
+    }
     res.render('lists/show', { car });
 }));
 
 // reach to the edit page to edit the vehicle 
 router.get('/:id/edit', catchAsync(async (req, res) => {
     const car = await Vehicle.findById(req.params.id);
+    if(!car){
+        req.flash('error', 'Cannot find that vehicle');
+        return res.redirect('/lists')
+    }
     res.render('lists/edit', { car });
 }));
 
@@ -54,6 +62,7 @@ router.get('/:id/edit', catchAsync(async (req, res) => {
 router.put('/:id',  validateVehicle, catchAsync(async (req, res) => {
     const { id } = req.params;
     const car = await Vehicle.findByIdAndUpdate(id, { ...req.body.car });
+    req.flash('success', 'Successfully updated vehicle');
     res.redirect(`/lists/${car._id}`)
 }));
 
@@ -61,6 +70,7 @@ router.put('/:id',  validateVehicle, catchAsync(async (req, res) => {
 router.delete('/:id', catchAsync (async (req, res) => {
     const { id } = req.params;
     await Vehicle.findByIdAndDelete(id);
+    req.flash('success', 'Successfully deleted a review');
     res.redirect('/lists');
 }));
 

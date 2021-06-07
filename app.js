@@ -16,8 +16,8 @@ const ExpressError = require('./utils/ExpressError');
 const { vehicleSchema, reviewSchema } = require('./schemas.js');
 
 //models MongoDB
-const Vehicle = require('./models/vehicle');
-const Review = require('./models/review');
+// const Vehicle = require('./models/vehicle');
+// const Review = require('./models/review');
 
 //router links e
 const lists = require('./Routes/lists');
@@ -30,7 +30,7 @@ const reviews = require('./Routes/reviews');
 //connecting to MongoDB 
 mongoose.connect('mongodb://localhost:27017/vehicleShow', { 
     useNewUrlParser: true, 
-    useUnifiedTopology: true, 
+    useUnifiedTopology: true,   
     useCreateIndex: true,
     useFindAndModify: false
 });
@@ -81,26 +81,26 @@ app.use((req, res, next) => {
 
 
 //Validating Schema for vehicle 
-const validateVehicle = (req, res, next) => {
-    const { error } = vehicledSchema.validate(req.body);
-    if (error) {
-        const msg = error.details.map(el => el.message).join(',')
-        throw new ExpressError(msg, 400)
-    } else {
-        next();
-    }
-}
+// const validateVehicle = (req, res, next) => {
+//     const { error } = vehicledSchema.validate(req.body);
+//     if (error) {
+//         const msg = error.details.map(el => el.message).join(',')
+//         throw new ExpressError(msg, 400)
+//     } else {
+//         next();
+//     }
+// }
 
 ////Validating Schema for review 
-const validateReview = (req, res, next) => {
-    const { error } = reviewSchema.validate(req.body);
-    if (error) {
-        const msg = error.details.map(el => el.message).join(',')
-        throw new ExpressError(msg, 400)
-    } else {
-        next();
-    }
-}
+// const validateReview = (req, res, next) => {
+//     const { error } = reviewSchema.validate(req.body);
+//     if (error) {
+//         const msg = error.details.map(el => el.message).join(',')
+//         throw new ExpressError(msg, 400)
+//     } else {
+//         next();
+//     }
+// }
 
 //app.use different links 
 app.use('/lists', lists)
