@@ -82,16 +82,20 @@ passport.deserializeUser(User.deserializeUser());
 
 
 app.use((req, res, next) => {
+    console.log(req.session)
+    res.locals.currentUser = req.user;
     res.locals.success = req.flash('success');
     res.locals.error = req.flash('error')
     next();
 })
 
-app.get('/fakeUser', async (req, res) => {
-    const user = new User({ email: 'leo@gmail.com', username: 'leo'})
-    const newUser = await User.register(user, 'lion') //create a password with hashing function to us 
-    res.send(newUser);
-})
+// This just an example for register system 
+// app.get('/fakeUser', async (req, res) => {
+//     const user = new User({ email: 'leo@gmail.com', username: 'leo'})
+//     const newUser = await User.register(user, 'lion') //create a password with hashing function to us 
+//     res.send(newUser);
+// })
+
 //Validating Schema for vehicle 
 // const validateVehicle = (req, res, next) => {
 //     const { error } = vehicledSchema.validate(req.body);

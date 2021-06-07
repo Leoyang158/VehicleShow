@@ -5,6 +5,7 @@ const catchAsync = require('../utils/catchAsync');
 const ExpressError = require('../utils/ExpressError');
 
 const { vehicleSchema } = require('../schemas.js');
+const { isLoggedIn } = require('../middleware');
 const Vehicle = require('../models/vehicle');
 
 
@@ -24,13 +25,13 @@ router.get('/', catchAsync(async (req, res) =>{
     res.render('lists/index', {cars});
 }));
 
-// create a new vehicle 
-router.get('/new', (req,res) => {
+// create a new vehicle , isLoggedIn is the middleware here to check whether the user has logged in yet
+router.get('/new', isLoggedIn, (req,res) => {
     res.render('lists/new');
 })
 
 // post the info to the following page
-router.post('/',  validateVehicle, catchAsync(async (req, res) => {
+router.post('/', isLoggedIn, validateVehicle, catchAsync(async (req, res) => {
     const car = new Vehicle(req.body.car);
     await car.save();
     req.flash('success', 'Successfully make a new car');
@@ -59,7 +60,7 @@ router.get('/:id/edit', catchAsync(async (req, res) => {
 }));
 
 // updating a vehicle info
-router.put('/:id',  validateVehicle, catchAsync(async (req, res) => {
+router.put('/:id', isLoggedIn, validateVehicle, catchAsync(async (req, res) => {
     const { id } = req.params;
     const car = await Vehicle.findByIdAndUpdate(id, { ...req.body.car });
     req.flash('success', 'Successfully updated vehicle');
@@ -67,7 +68,7 @@ router.put('/:id',  validateVehicle, catchAsync(async (req, res) => {
 }));
 
 // delete a vehicle page 
-router.delete('/:id', catchAsync (async (req, res) => {
+router.delete('/:id', isLoggedIn, catchAsync (async (req, res) => {
     const { id } = req.params;
     await Vehicle.findByIdAndDelete(id);
     req.flash('success', 'Successfully deleted a review');
