@@ -33,6 +33,7 @@ router.get('/new', isLoggedIn, (req,res) => {
 // post the info to the following page
 router.post('/', isLoggedIn, validateVehicle, catchAsync(async (req, res) => {
     const car = new Vehicle(req.body.car);
+    car.author = req.user._id;
     await car.save();
     req.flash('success', 'Successfully make a new car');
     res.redirect(`/lists/${car._id}`)
@@ -41,7 +42,8 @@ router.post('/', isLoggedIn, validateVehicle, catchAsync(async (req, res) => {
 // each vehicle has different id
 // each id represents diff of pages 
 router.get('/:id', catchAsync(async (req, res) => {
-    const car = await Vehicle.findById(req.params.id).populate('reviews');
+    const car = await Vehicle.findById(req.params.id).populate('reviews').populate('author');
+    // console.log(car);
     if(!car){
         req.flash('error', 'Cannot find that vehicle');
         return res.redirect('/lists')
