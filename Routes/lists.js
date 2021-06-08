@@ -5,19 +5,8 @@ const catchAsync = require('../utils/catchAsync');
 const ExpressError = require('../utils/ExpressError');
 
 const { vehicleSchema } = require('../schemas.js');
-const { isLoggedIn } = require('../middleware');
+const { isLoggedIn, isAuthor, validateVehicle } = require('../middleware');
 const Vehicle = require('../models/vehicle');
-
-
-const validateVehicle = (req, res, next) => {
-    const { error } = vehicleSchema.validate(req.body);
-    if (error) {
-        const msg = error.details.map(el => el.message).join(',')
-        throw new ExpressError(msg, 400)
-    } else {
-        next();
-    }
-}
 
 // the index page, listing all the cars
 router.get('/', catchAsync(async (req, res) =>{
@@ -52,8 +41,9 @@ router.get('/:id', catchAsync(async (req, res) => {
 }));
 
 // reach to the edit page to edit the vehicle 
-router.get('/:id/edit', catchAsync(async (req, res) => {
-    const car = await Vehicle.findById(req.params.id);
+router.get('/:id/edit', isLoggedIn, isAuthor, catchAsync(async (req, res) => { //middleware has higher order 
+    const { id } = req.params;
+    const car = await Vehicle.findById(id);
     if(!car){
         req.flash('error', 'Cannot find that vehicle');
         return res.redirect('/lists')
@@ -62,7 +52,7 @@ router.get('/:id/edit', catchAsync(async (req, res) => {
 }));
 
 // updating a vehicle info
-router.put('/:id', isLoggedIn, validateVehicle, catchAsync(async (req, res) => {
+router.put('/:id', isLoggedIn, isAuthor, validateVehicle, catchAsync(async (req, res) => {
     const { id } = req.params;
     const car = await Vehicle.findByIdAndUpdate(id, { ...req.body.car });
     req.flash('success', 'Successfully updated vehicle');
@@ -70,7 +60,7 @@ router.put('/:id', isLoggedIn, validateVehicle, catchAsync(async (req, res) => {
 }));
 
 // delete a vehicle page 
-router.delete('/:id', isLoggedIn, catchAsync (async (req, res) => {
+router.delete('/:id', isLoggedIn, isAuthor, catchAsync (async (req, res) => {
     const { id } = req.params;
     await Vehicle.findByIdAndDelete(id);
     req.flash('success', 'Successfully deleted a review');
