@@ -7,64 +7,27 @@ const ExpressError = require('../utils/ExpressError');
 const { vehicleSchema } = require('../schemas.js');
 const { isLoggedIn, isAuthor, validateVehicle } = require('../middleware');
 const Vehicle = require('../models/vehicle');
+const lists = require('../controllers/lists');
+const { route } = require('./about');
 
 // the index page, listing all the cars
-router.get('/', catchAsync(async (req, res) =>{
-    const cars = await Vehicle.find({})
-    res.render('lists/index', {cars});
-}));
+router.route('/')
+    // create a new vehicle , isLoggedIn is the middleware here to check whether the user has logged in yet
+    .get(catchAsync(lists.index))
+    // post the info to the following page
+    .post(isLoggedIn, validateVehicle, catchAsync(lists.createVehicle))
 
-// create a new vehicle , isLoggedIn is the middleware here to check whether the user has logged in yet
-router.get('/new', isLoggedIn, (req,res) => {
-    res.render('lists/new');
-})
 
-// post the info to the following page
-router.post('/', isLoggedIn, validateVehicle, catchAsync(async (req, res) => {
-    const car = new Vehicle(req.body.car);
-    car.author = req.user._id;
-    await car.save();
-    req.flash('success', 'Successfully make a new car');
-    res.redirect(`/lists/${car._id}`)
-}));
+router.get('/new', isLoggedIn, lists.renderNewForm)
 
-// each vehicle has different id
-// each id represents diff of pages 
-router.get('/:id', catchAsync(async (req, res) => {
-    const car = await Vehicle.findById(req.params.id).populate('reviews').populate('author');
-    // console.log(car);
-    if(!car){
-        req.flash('error', 'Cannot find that vehicle');
-        return res.redirect('/lists')
-    }
-    res.render('lists/show', { car });
-}));
+router.route('/:id')
+    // each vehicle has different id, and each id represents diff of pages 
+    .get(catchAsync(lists.showVehile))  
+    // updating a vehicle info
+    .put(isLoggedIn, isAuthor, validateVehicle, catchAsync(lists.validateVehicle))
+    // delete a vehicle page 
+    .delete(isLoggedIn, isAuthor, catchAsync (lists.deleteVehile))
 
-// reach to the edit page to edit the vehicle 
-router.get('/:id/edit', isLoggedIn, isAuthor, catchAsync(async (req, res) => { //middleware has higher order 
-    const { id } = req.params;
-    const car = await Vehicle.findById(id);
-    if(!car){
-        req.flash('error', 'Cannot find that vehicle');
-        return res.redirect('/lists')
-    }
-    res.render('lists/edit', { car });
-}));
-
-// updating a vehicle info
-router.put('/:id', isLoggedIn, isAuthor, validateVehicle, catchAsync(async (req, res) => {
-    const { id } = req.params;
-    const car = await Vehicle.findByIdAndUpdate(id, { ...req.body.car });
-    req.flash('success', 'Successfully updated vehicle');
-    res.redirect(`/lists/${car._id}`)
-}));
-
-// delete a vehicle page 
-router.delete('/:id', isLoggedIn, isAuthor, catchAsync (async (req, res) => {
-    const { id } = req.params;
-    await Vehicle.findByIdAndDelete(id);
-    req.flash('success', 'Successfully deleted a review');
-    res.redirect('/lists');
-}));
-
+    // reach to the edit page to edit the vehicle 
+router.get('/:id/edit', isLoggedIn, isAuthor, catchAsync(lists.editVehicle))
 module.exports = router;

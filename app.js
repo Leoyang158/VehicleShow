@@ -14,7 +14,7 @@ const catchAsync = require('./utils/catchAsync');
 const ExpressError = require('./utils/ExpressError');
 
 //middleware
-const { isLoggedIn, isAuthr, validateVehicle } = require('../middleware')
+const { isLoggedIn, isAuthr, validateVehicle } = require('./middleware')
 
 //validation schema 
 const { vehicleSchema, reviewSchema } = require('./schemas.js');

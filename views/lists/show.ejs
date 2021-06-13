@@ -11,7 +11,7 @@
                 <li class="list-group-item">Car Year: <%= car.year %></li>
                 <li class="list-group-item">Submitted by <%= car.author.username %></li>
             </ul>
-            <% if(currentUser && car.author.equals(currentUser._id)) {%>
+            <% if( currentUser && car.author.equals(currentUser._id)) { %>
             <div class="card-body">
                 <a class="card-link btn btn-info" href="/lists/<%=car._id%>/edit">Edit</a>
                 <form class="d-inline" action="/lists/<%=car._id%>?_method=DELETE" method="POST">
@@ -25,6 +25,7 @@
         </div>
     </div>
     <div class="col-6">
+        <% if(currentUser) { %>
         <h2>Leave a Review</h2>
         <form action="/lists/<%=car._id%>/reviews" method="POST" class="mb-3 validated-form" novalidate>
             <div class="mb-3">
@@ -40,14 +41,18 @@
             </div>
             <button class="btn btn-success">Submit</button>
         </form>
+        <% } %>
         <% for(let review of car.reviews) { %>
         <div class="card mb-3 ">
             <div class="card-body">
                 <h5 class="card-title">Rating: <%= review.rating %></h5>
                 <p class="card-text">Review: <%= review.body %></p>
+                <p class='card-subtitle mb-2 text-muted'>By <%= review.author.username %></p>
+                <% if( currentUser && review.author.equals(currentUser._id) {%>
                 <form action="/lists/<%=car._id%>/reviews/<%=review._id%>?_method=DELETE" method="POST">
                     <button class="btn btn-sm btn-danger">Delete</button>
                 </form>
+                <% } %>
             </div>
         </div>
         <% } %>
