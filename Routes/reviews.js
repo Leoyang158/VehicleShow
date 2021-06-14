@@ -12,23 +12,10 @@ const Review = require('../models/review');
 
 const { reviewSchema } = require('../schemas.js');
 
-router.post('/', isLoggedIn, validateReview, catchAsync(async (req, res) => {
-    const car = await Vehicle.findById(req.params.id);
-    const review = new Review(req.body.review);
-    review.author = req.user._id;
-    car.reviews.push(review);
-    await review.save();
-    await car.save();
-    req.flash('success', 'Successfully make a new review');
-    res.redirect(`/lists/${car._id}`);
-}))
+const reviews = require('../controllers/reviews');
 
-router.delete('/:reviewId', isLoggedIn, isReviewAuthor, catchAsync(async (req, res) => {
-    const { id, reviewId } = req.params;
-    await Vehicle.findByIdAndUpdate(id, { $pull: { reviews: reviewId } });
-    await Review.findByIdAndDelete(reviewId);
-    req.flash('success', 'Successfully deleted a review');
-    res.redirect(`/lists/${id}`);
-}))
+router.post('/', isLoggedIn, validateReview, catchAsync(reviews.createReview))
+
+router.delete('/:reviewId', isLoggedIn, isReviewAuthor, catchAsync(reviews.deleteReview))
 
 module.exports = router; 

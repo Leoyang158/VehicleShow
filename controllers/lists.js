@@ -1,7 +1,7 @@
 const Vehicle = require('../models/vehicle');
 
 module.exports.index = async (req, res) =>{
-    const cars = await Vehicle.find({})
+    const cars = await Vehicle.find({});
     res.render('lists/index', {cars});
 }
 

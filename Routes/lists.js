@@ -4,11 +4,11 @@ const router = express.Router();
 const catchAsync = require('../utils/catchAsync');
 const ExpressError = require('../utils/ExpressError');
 
-const { vehicleSchema } = require('../schemas.js');
+// const { vehicleSchema } = require('../schemas.js');
 const { isLoggedIn, isAuthor, validateVehicle } = require('../middleware');
 const Vehicle = require('../models/vehicle');
+
 const lists = require('../controllers/lists');
-const { route } = require('./about');
 
 // the index page, listing all the cars
 router.route('/')
@@ -30,4 +30,5 @@ router.route('/:id')
 
     // reach to the edit page to edit the vehicle 
 router.get('/:id/edit', isLoggedIn, isAuthor, catchAsync(lists.editVehicle))
+
 module.exports = router;
