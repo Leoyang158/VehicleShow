@@ -8,8 +8,8 @@ The webpage will show you all kinds of vehicles that you look for and including 
 
 To execute the file 
 1. Run the seeds file
-2. npm -i nodemon
-3. nodemon app.js 
+2. npm -i (All node modules installed)
+3. nodemon app.js or node app.js
 
 Thanks
 Linjian Yang 
