@@ -13,6 +13,9 @@ const User = require('./models/user');
 const catchAsync = require('./utils/catchAsync');
 const ExpressError = require('./utils/ExpressError');
 
+//middleware
+const { isLoggedIn, isAuthr, validateVehicle } = require('./middleware')
+
 //validation schema 
 const { vehicleSchema, reviewSchema } = require('./schemas.js');
 
@@ -77,42 +80,25 @@ app.use(flash())
 app.use(passport.initialize());
 app.use(passport.session());
 passport.use(new LocalStrategy(User.authenticate())); // we want to access the localstragy within the user's model
+
 passport.serializeUser(User.serializeUser()); //used to store the user in the session 
 passport.deserializeUser(User.deserializeUser());
 
 
 app.use((req, res, next) => {
+    console.log(req.session)
+    res.locals.currentUser = req.user;
     res.locals.success = req.flash('success');
     res.locals.error = req.flash('error')
     next();
 })
 
-app.get('/fakeUser', async (req, res) => {
-    const user = new User({ email: 'leo@gmail.com', username: 'leo'})
-    const newUser = await User.register(user, 'lion') //create a password with hashing function to us 
-    res.send(newUser);
-})
-//Validating Schema for vehicle 
-// const validateVehicle = (req, res, next) => {
-//     const { error } = vehicledSchema.validate(req.body);
-//     if (error) {
-//         const msg = error.details.map(el => el.message).join(',')
-//         throw new ExpressError(msg, 400)
-//     } else {
-//         next();
-//     }
-// }
-
-////Validating Schema for review 
-// const validateReview = (req, res, next) => {
-//     const { error } = reviewSchema.validate(req.body);
-//     if (error) {
-//         const msg = error.details.map(el => el.message).join(',')
-//         throw new ExpressError(msg, 400)
-//     } else {
-//         next();
-//     }
-// }
+// This just an example for register system 
+// app.get('/fakeUser', async (req, res) => {
+//     const user = new User({ email: 'leo@gmail.com', username: 'leo'})
+//     const newUser = await User.register(user, 'lion') //create a password with hashing function to us 
+//     res.send(newUser);
+// })
 
 //app.use different links 
 app.use('/', usersRoute)

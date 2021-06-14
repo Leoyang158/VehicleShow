@@ -2,6 +2,8 @@ const express = require('express');
 const router = express.Router({mergeParams: true}); 
 //make sure set mergeParm to be true, to share the same params in the same file 
 
+const { validateReview, isLoggedIn, isReviewAuthor } = require('../middleware');
+
 const catchAsync = require('../utils/catchAsync');
 const ExpressError = require('../utils/ExpressError');
 
@@ -10,32 +12,10 @@ const Review = require('../models/review');
 
 const { reviewSchema } = require('../schemas.js');
 
-const validateReview = (req, res, next) => {
-    const { error } = reviewSchema.validate(req.body);
-    if (error) {
-        const msg = error.details.map(el => el.message).join(',')
-        throw new ExpressError(msg, 400)
-    } else {
-        next();
-    }
-}
+const reviews = require('../controllers/reviews');
 
-router.post('/', validateReview, catchAsync(async (req, res) => {
-    const car = await Vehicle.findById(req.params.id);
-    const review = new Review(req.body.review);
-    car.reviews.push(review);
-    await review.save();
-    await car.save();
-    req.flash('success', 'Successfully make a new review');
-    res.redirect(`/lists/${car._id}`);
-}))
+router.post('/', isLoggedIn, validateReview, catchAsync(reviews.createReview))
 
-router.delete('/:reviewId', catchAsync(async (req, res) => {
-    const { id, reviewId } = req.params;
-    await Vehicle.findByIdAndUpdate(id, { $pull: { reviews: reviewId } });
-    await Review.findByIdAndDelete(reviewId);
-    req.flash('success', 'Successfully deleted a review');
-    res.redirect(`/lists/${id}`);
-}))
+router.delete('/:reviewId', isLoggedIn, isReviewAuthor, catchAsync(reviews.deleteReview))
 
 module.exports = router; 

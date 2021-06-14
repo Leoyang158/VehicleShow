@@ -38,6 +38,7 @@ request(options, function (error, response, body) {
         for(let car of cars){
                 // console.log(car.make);
             const vehicle = new Vehicle({
+                author: '60bfaa9f2b8c455074db2054',
                 year: car.year,
                 make: car.make,
                 model: car.model,
