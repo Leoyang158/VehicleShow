@@ -1,27 +1,38 @@
 <% layout('layouts/boilerplate')%>
 <h1>Search For Vehicle</h1>
-<form action="/search" method="POST">
+<br>
+
+<form id="searchForm">
     <div>
         <label for="Type">Enter Type</label>
-        <input type="text" name="Type" id="Type" placeholder="Type">
+        <input type="text" name="type" placeholder="Vehicle Type">
     </div>
 
     <br>
     <div>
         <label for="Model">Enter Model</label>
-        <input type="text" name="Model" id="Model" placeholder="Model">
+        <input type="text" name="model" placeholder="Vehicle Model">
     </div>
     <br>
 
     <div>
-      <label for="Year">Enter Year</label>
-      <input type="text" name="Year" id="Year" placeholder="Year">
+        <label for="Model">Enter Year</label>
+        <input type="text" name="year" placeholder="Vehicle Year">
     </div>
     <br>
-    
-    <label for="customRange1" class="form-label">Example range</label>
-    <input type="range" class="form-range" min="5" max="20" id="Range">
+
+    <div>
+        <label for="Model">Enter Make</label>
+        <input type="text" name="make" placeholder="Vehicle Make">
+    </div>
     <br>
 
+    
+    <label for="customRange1" class="form-label">Search Range</label>
+    <input type="range" class="form-range" min="5" max="20" name="range">
+    <br>
+
+    <input class="btn btn-secondary" type="reset" value="Reset">
     <input class="btn btn-primary" type="submit" value="Submit">
 </form>
+<script src="/search_lists.js"></script>
