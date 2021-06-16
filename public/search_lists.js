@@ -7,7 +7,7 @@ form.addEventListener('submit', async function (e){
     // console.log(form.elements.year.value);
     // console.log(form.elements.model.value);
     // console.log(form.elements.type.value);
-    // console.log(form.elements.range.value)
+    // console.log(form.elements.range.value);
     const make = form.elements.make.value;
     const year = form.elements.year.value;
     const model = form.elements.model.value;
@@ -20,19 +20,111 @@ form.addEventListener('submit', async function (e){
     const options = {
         method: 'GET',
         url: 'https://car-data.p.rapidapi.com/cars',
-        params: {limit: '10', page: '0', year: year, type: type, model: model, make: make},
+        params: {limit: '3', page: '0', year: year, type: type, model: model, make: make},
         headers: {
         'x-rapidapi-key': '20d6c5a99bmsh5f5da4f8b6aa626p101941jsn1c9e0828d976',
         'x-rapidapi-host': 'car-data.p.rapidapi.com'
         }
     };
-    
-    axios.request(options).then(function (response) {
-        console.log(response.data);
+    //
+    const vehicleCar = await axios.request(options).then(function (response) {
+        // console.log(response.data);
         //adding the unsplash api here to abstract the picture
-    }).catch(function (error) {
+        console.log(response.data)
+        return response.data;
+
+        }).catch(function (error) {
         console.error(error);
     });
+    
+    const container = document.querySelector('#container');
+    for(let car of vehicleCar){
+        // const imgApi = await axios.get(`https://api.unsplash.com/search/photos?query=${car['make']}${car['model']}${car['year']}&client_id=TFhu6RR7b5Ts2qtiboVZfSWWNjHsWx0gm12zaQZMr6I`);
+        const imgApi = await axios.get(`https://api.unsplash.com/search/photos?query=${car['make']}&client_id=TFhu6RR7b5Ts2qtiboVZfSWWNjHsWx0gm12zaQZMr6I`);
+        // const carImg = makeImages(imgApi);
+        const carMake = car['make']; 
+        const carModel = car['model'];
+        const carYear = car['year'];
+        const carType = car['type']; 
 
-      
+        var entireCard = document.createElement("div");
+        entireCard.classList.add("flip-card");
+
+        var card = document.createElement('div');
+        card.classList.add("flip-card-inner");
+
+        var flipFront = document.createElement('div');
+        flipFront.classList.add("flip-card-front")
+        var newImg = document.createElement('img');
+        newImg.classList.add('carGallery')
+        newImg.src = imgApi['data']['results'][0]['urls'].raw;
+        newImg.alt = "Avatar";
+        newImg.style = "width:300px;height:300px;"
+        flipFront.appendChild(newImg);
+
+        var carCollection = document.createElement('div');
+        carCollection.classList.add("flip-card-back");
+        carCollection.appendChild(document.createTextNode(carMake));
+
+        var formHidden = document.createElement('form');
+        formHidden.setAttribute("method", "post");
+        formHidden.setAttribute("action", "/search");
+
+        const makeHidden = document.createElement('input');
+        makeHidden.type = "hidden";
+        makeHidden.name = 'make';
+        makeHidden.value = carMake;
+
+        const modelHidden = document.createElement('input');
+        modelHidden.type = "hidden";
+        modelHidden.name = 'model';
+        modelHidden.value = carModel;
+
+        const yearHidden = document.createElement('input');
+        yearHidden.type = "hidden";
+        yearHidden.name = 'year';
+        yearHidden.value = carYear;
+
+        const typeHidden = document.createElement('input');
+        typeHidden.type = "hidden";
+        typeHidden.name = 'type';
+        typeHidden.value = carType;
+
+        var buttonInner = document.createElement('button');
+        buttonInner.className = "btn btn-outline-primary";
+        buttonInner.innerHTML = 'Like';
+
+        formHidden.appendChild(makeHidden);
+        formHidden.appendChild(modelHidden);
+        formHidden.appendChild(yearHidden);
+        formHidden.appendChild(typeHidden);
+        formHidden.appendChild(buttonInner);
+
+        carCollection.appendChild(buttonInner);
+
+        card.appendChild(flipFront);
+        card.appendChild(carCollection);
+        
+        entireCard.appendChild(card);
+        
+        container.appendChild(entireCard)
+    }  
 })
+
+// const makeImages = (vehicleImg) => {
+//     const img = document.createElement('IMG');
+//     img.src = vehicleImg['data']['results'][0]['urls'].raw
+//     document.body.append(img)
+// }
+
+// form.addEventListener('submit', async function (e){
+//     e.preventDefault();
+//     const vehicle = new Vehicle({
+//         author: '60bfaa9f2b8c455074db2054',
+//         year: car.year,
+//         make: car.make,
+//         model: car.model,
+//         type:  car.type
+//     });
+//     await vehicle.save();
+// })
