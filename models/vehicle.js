@@ -8,6 +8,7 @@ const VehicleSchema = new Schema({
     model: String,
     type: String,
     description: String,
+    url: String,
     author: {
         type: Schema.Types.ObjectId,
         ref: 'User'

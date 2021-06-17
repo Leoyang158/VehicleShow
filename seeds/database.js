@@ -39,6 +39,7 @@ request(options, function (error, response, body) {
                 // console.log(car.make);
             const vehicle = new Vehicle({
                 author: '60bfaa9f2b8c455074db2054',
+                url: 'https://images.unsplash.com/photo-1552519507-da3b142c6e3d?ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8Y2Fyc3xlbnwwfHwwfHw%3D&ixlib=rb-1.2.1&w=1000&q=80',
                 year: car.year,
                 make: car.make,
                 model: car.model,
