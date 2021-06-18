@@ -1,5 +1,4 @@
-// const axios = require("axios");
-// import axios from "axios";
+// const vehicle = require("../models/vehicle");
 const form = document.querySelector('#searchForm');
 form.addEventListener('submit', async function (e){
         e.preventDefault();
@@ -29,18 +28,20 @@ form.addEventListener('submit', async function (e){
         //
         const vehicleCar = await axios.request(options).then(function (response) {
             // console.log(response.data);
-            //adding the unsplash api here to abstract the picture
+            // adding the unsplash api here to abstract the picture
             // console.log(response.data)
             return response.data;
 
             }).catch(function (error) {
             console.error(error);
         });
-    
+        
         const container = document.querySelector('#container');
         container.innerHTML = "";
+        var index = 0;
+        // var modelList = [];
         for(let car of vehicleCar){
-            // const imgApi = await axios.get(`https://api.unsplash.com/search/photos?query=${car['make']}${car['model']}${car['year']}&client_id=TFhu6RR7b5Ts2qtiboVZfSWWNjHsWx0gm12zaQZMr6I`);
+            
             const imgApi = await axios.get(`https://api.unsplash.com/search/photos?query=${car['make']}&client_id=TFhu6RR7b5Ts2qtiboVZfSWWNjHsWx0gm12zaQZMr6I`);
             // const carImg = makeImages(imgApi);
             const carMake = car['make']; 
@@ -48,106 +49,88 @@ form.addEventListener('submit', async function (e){
             const carYear = car['year'];
             const carType = car['type']; 
 
-        // const carImg = 'https://images.unsplash.com/photo-1552519507-da3b142c6e3d?ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8Y2Fyc3xlbnwwfHwwfHw%3D&ixlib=rb-1.2.1&w=1000&q=80';
-        // const carMake = 'Ford'; 
-        // const carModel = 'Montemory';
-        // const carYear = '2007';
-        // const carType = 'Sedan'; 
-        var entireCard = document.createElement("div");
-        entireCard.classList.add("flip-card");
+            // const carImg = 'https://images.unsplash.com/photo-1552519507-da3b142c6e3d?ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8Y2Fyc3xlbnwwfHwwfHw%3D&ixlib=rb-1.2.1&w=1000&q=80';
+            // const carMake = 'Ford'; 
+            // const carModel = 'Montemory';
+            // const carYear = '2007';
+            // const carType = 'Sedan'; 
 
-        var card = document.createElement('div');
-        card.classList.add("flip-card-inner");
+            var entireCard = document.createElement("div");
+            entireCard.classList.add("flip-card");
 
-        var flipFront = document.createElement('div');
-        flipFront.classList.add("flip-card-front")
-        var newImg = document.createElement('img');
-        newImg.classList.add('carGallery')
-        newImg.src = imgApi['data']['results'][0]['urls'].raw;
-        // newImg.src = carImg;
-        newImg.alt = "Avatar";
-        newImg.style = "width:300px;height:300px;"
-        const imgLink = newImg.src;
-        flipFront.appendChild(newImg);
+            var card = document.createElement('div');
+            card.classList.add("flip-card-inner");
 
-        var carCollection = document.createElement('div');
-        carCollection.classList.add("flip-card-back");
-        carCollection.appendChild(document.createTextNode(carMake));
+            var flipFront = document.createElement('div');
+            flipFront.classList.add("flip-card-front")
+            var newImg = document.createElement('img');
+            newImg.classList.add('carGallery')
+            // for(let i = 0; i < modelList.length; i++){
+            //     if(modelList[i] == car['model']){
+            //         index += 1;
+            //     }
+            // }
+            newImg.src = imgApi['data']['results'][index]['urls'].raw;
+            // modelList.push(car['model']);
+            index += 1;
+            newImg.alt = "Avatar";
+            newImg.style = "width:300px;height:300px;"
+            const imgLink = newImg.src;
+            flipFront.appendChild(newImg);
 
-        var formHidden = document.createElement('form');
-        // formHidden.setAttribute("id","hiddenForm");
-        formHidden.setAttribute("method", "post");
-        formHidden.setAttribute("action", "/search");
+            var carCollection = document.createElement('div');
+            carCollection.classList.add("flip-card-back");
+            carCollection.appendChild(document.createTextNode(carMake));
 
-        const makeHidden = document.createElement('input');
-        makeHidden.type = "hidden";
-        makeHidden.name = "car[make]";
-        makeHidden.value = carMake;
+            var formHidden = document.createElement('form');
+            formHidden.setAttribute("method", "post");
+            formHidden.setAttribute("action", "/search");
 
-        const modelHidden = document.createElement('input');
-        modelHidden.type = "hidden";
-        modelHidden.name = "car[model]";
-        modelHidden.value = carModel;
+            const makeHidden = document.createElement('input');
+            makeHidden.type = "hidden";
+            makeHidden.name = "car[make]";
+            makeHidden.value = carMake;
 
-        const yearHidden = document.createElement('input');
-        yearHidden.type = "hidden";
-        yearHidden.name = "car[year]";
-        yearHidden.value = carYear;
+            const modelHidden = document.createElement('input');
+            modelHidden.type = "hidden";
+            modelHidden.name = "car[model]";
+            modelHidden.value = carModel;
 
-        const typeHidden = document.createElement('input');
-        typeHidden.type = "hidden";
-        typeHidden.name = "car[type]";
-        typeHidden.value = carType;
+            const yearHidden = document.createElement('input');
+            yearHidden.type = "hidden";
+            yearHidden.name = "car[year]";
+            yearHidden.value = carYear;
 
-        const urlHidden = document.createElement('input');
-        urlHidden.type = "hidden";
-        urlHidden.name = "car[url]";
-        urlHidden.value = imgLink;
+            const typeHidden = document.createElement('input');
+            typeHidden.type = "hidden";
+            typeHidden.name = "car[type]";
+            typeHidden.value = carType;
 
-        const buttonInner = document.createElement('button');
-        buttonInner.className = "btn btn-outline-primary";
-        buttonInner.innerHTML = 'Like';
+            const urlHidden = document.createElement('input');
+            urlHidden.type = "hidden";
+            urlHidden.name = "car[url]";
+            urlHidden.value = imgLink;
 
-        formHidden.appendChild(makeHidden);
-        formHidden.appendChild(modelHidden);
-        formHidden.appendChild(yearHidden);
-        formHidden.appendChild(typeHidden);
-        formHidden.appendChild(urlHidden);
-        formHidden.appendChild(buttonInner);
+            const buttonInner = document.createElement('button');
+            buttonInner.className = "btn btn-outline-primary";
+            buttonInner.innerHTML = 'Like';
 
-        carCollection.appendChild(formHidden);
+            formHidden.appendChild(makeHidden);
+            formHidden.appendChild(modelHidden);
+            formHidden.appendChild(yearHidden);
+            formHidden.appendChild(typeHidden);
+            formHidden.appendChild(urlHidden);
+            formHidden.appendChild(buttonInner);
 
-        card.appendChild(flipFront);
-        card.appendChild(carCollection);
-        
-        entireCard.appendChild(card);
-        
-        container.appendChild(entireCard)
+            carCollection.appendChild(formHidden);
+
+            card.appendChild(flipFront);
+            card.appendChild(carCollection);
+            
+            entireCard.appendChild(card);
+            
+            container.appendChild(entireCard)
     }  
-
-    // const formNew = document.querySelector('#hiddenForm');
-    // formNew.addEventListener('submit', async function (e){
-    //     e.preventDefault();
-    //     const Cmake = form.elements.hiddenMake.value;
-    //     const Cyear = form.elements.hiddenYear.value;
-    //     const Cmodel = form.elements.hiddenModel.value;
-    //     const Ctype = form.elements.hiddenType.value;
-    //     const Curl = form.elements.hiddenUrl.value;
-    //     const CnewCar = new Vehicle({
-    //         author: '60bfaa9f2b8c455074db2054',
-    //         year: Cyear,
-    //         make: Cmake,
-    //         model: Cmodel,
-    //         type:  Ctype,
-    //         url: Curl
-    //     });
-    //     await CnewCar.save();
-    // })
 })
 
-// const makeImages = (vehicleImg) => {
-//     const img = document.createElement('IMG');
-//     img.src = vehicleImg['data']['results'][0]['urls'].raw
-//     document.body.append(img)
-// }
 
