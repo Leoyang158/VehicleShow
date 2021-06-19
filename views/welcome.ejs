@@ -9,48 +9,79 @@
         integrity="sha384-r4NyP46KrjDleawBgD5tp8Y7UzmLA05oM1iAEQ17CSuDqnUK2+k9luXQOfXJCJ4I" crossorigin="anonymous">
     <link rel="stylesheet" href="/stylesheets/home.css">
     <link rel="icon" href="https://img.icons8.com/plasticine/2x/car--v2.png">
-    <!-- <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
-    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <link rel="preconnect" href="https://fonts.gstatic.com">
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300&display=swap" rel="stylesheet"> -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@100&family=Righteous&display=swap" rel="stylesheet">
+        
     <link rel="stylesheet" href="./css/welcome.css">
 </head>
+<style>
+    body {
+        background-image: url('https://i.pinimg.com/originals/c0/e0/ee/c0e0ee9ce443a0538f66eb8bdbcd37c1.jpg');
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+        background-size: cover;
+    }
 
-<body class="d-flex text-center text-dark bg-light">
+    footer {
+            position: fixed;
+            padding: 10px 10px 0px 10px;
+            bottom: 0;
+            width: 100%;
+            /* Height of the footer*/ 
+            height: 60px;
+            background: rgb(0, 0, 0);
+    }
+    #navPage{
+        font-family: 'Righteous', cursive;
+        font-size: 20px;
+        color: rgb(0, 0, 0);
+    }
+
+    #mainTitle{
+        font-family: 'Righteous', cursive;
+        font-size: 60px;
+        color: rgb(0, 0, 0);
+    }
+
+    .lead{
+        font-family: 'Righteous', cursive;
+        font-size: 30px;
+        color: rgb(0, 0, 0);
+    }
+
+</style>
+<body class="d-flex text-center text-black-50 bg-light">
 
     <div class="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column">
         <header class="mb-auto">
             <div>
-                <h3 class="float-md-left mb-0">Vehicle Show</h3>
                 <nav class="nav nav-masthead justify-content-center float-md-right">
-                    <a class="nav-link active" aria-current="page" href="">Home</a>
-                    <a class="nav-link" href="/about">About us</a>
-                    <a class="nav-link" href="/contact">Contact</a>
-                    <a class="nav-link" href="/lists">Lists</a>
+                    <a class="nav-link active" aria-current="page" href="" id="navPage">Home</a>
+                    <a class="nav-link" href="/about" id="navPage">About us</a>
+                    <a class="nav-link" href="/contact" id="navPage">Contact</a>
+                    <a class="nav-link" href="/lists" id="navPage"> Favorite Lists</a>
                     <% if(!currentUser) { %>
-                    <a class="nav-link" href="/login">Login</a>
-                    <a class="nav-link" href="/register">Register</a>
+                    <a class="nav-link" href="/login" id="navPage">Login</a>
+                    <a class="nav-link" href="/register" id="navPage">Register</a>
                     <% } else { %>
-                    <a class="nav-link" href="/logout">Logout</a>
+                    <a class="nav-link" href="/logout" id="navPage">Logout</a>
                     <% } %>
                 </nav>
             </div>
         </header>
-
+        <br>
+        <br>
         <main class="px-3">
-            <h1>Vehicle Show</h1>
-            <p class="lead"> Welcome to Vehicle Show! <br> Jump right in and explore our many campgrounds. <br>
+            <h1 id="mainTitle">Car Dream</h1>
+            <p class="lead"> Welcome to to the car show! <br> Jump right in and explore our many vehicles. <br>
                 Feel free to share some of your own and comment on others!</p>
-            <a href="/search" class="btn btn-lg btn-secondary font-weight-bold border-white bg-white">Search For</a>
+            <a href="/search" class="btn btn-info font-weight-bold border-white">Search For</a>
         </main>
         
           
-        <footer class="mt-auto text-white-50">
-            <p>&copy; 2020 </p>
-            <a href="#"><img src="./icons/github-brands 1.svg" alt="github" title="github page"></a>
-            <a href="#"><img src="./icons/instagram.svg" alt="instagram" title="instagram page"></a>
-        </footer>
+        <!-- <footer class="mt-auto text-white-50">
+            <p>&copy; 2021 </p>
+        </footer> -->
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"

@@ -41,7 +41,7 @@ form.addEventListener('submit', async function (e){
         // var index = 0;
         // // var modelList = [];
         // for(let car of vehicleCar){
-        for(let i = 0; i < 3; i++){
+        for(let i = 0; i < 4; i++){
         //     const imgApi = await axios.get(`https://api.unsplash.com/search/photos?query=${car['make']}&client_id=TFhu6RR7b5Ts2qtiboVZfSWWNjHsWx0gm12zaQZMr6I`);
         //     // const carImg = makeImages(imgApi);
         //     const carMake = car['make']; 
@@ -81,7 +81,7 @@ form.addEventListener('submit', async function (e){
             title.appendChild(titleText);
 
             var brand = document.createElement("p");
-            brand.classList.add("price");
+            brand.classList.add("make");
             var brandText = document.createTextNode(carMake);
             brand.appendChild(brandText);
 

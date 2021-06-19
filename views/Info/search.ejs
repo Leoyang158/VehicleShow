@@ -1,76 +1,100 @@
 <% layout('layouts/boilerplate')%>
-<h1>Search For Vehicle</h1>
-<br>
 <style>
     .card {
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
-    max-width: 300px;
-    /* width: 300px;
-    height: 200px; */
-    padding: 5px;
+    box-shadow: 0 4px 8px 0 rgba(29, 28, 28, 0.2);
+    /* max-width: 300px; */
     border-radius: 1%;
-    border:2px solid #1e1c1c;
+    border:2px solid #8e8383;
     margin-left: auto;
-    width: 33.33%;
-    /* margin: auto; */
     text-align:center;
-    font-family: arial;
+    font-family: 'Noto Sans JP', sans-serif;
+    float: left;
+    width: 33.33%;
+    padding: 10px;
     }
 
-    .price {
-    color: grey;
-    font-size: 18px;
+    .make {
+    color: rgb(0, 0, 0);
+    font-size: 20px;
     }
 
     .card button {
     border: none;
     outline: 0;
-    padding: 12px;
+    padding: 10px;
     color: white;
-    background-color: #000;
+    background-color: rgb(49, 48, 48);
     text-align: center;
     cursor: pointer;
     width: 100%;
-    font-size: 18px;
+    font-size: 20px;
     }
 
     .card button:hover {
-    opacity: 0.7;
+        opacity: 0.7;
     }
 
-    .column{
-        width:100%;
+    #container:after {
+    content: "";
+    display: table;
+    clear: both;
+    } 
+    
+    .title{
+        font-family: 'Righteous', cursive;
+        font-size: 50px;
+        color: #000000;
+    }
+
+    .inputInfo{
+        font-family: 'Righteous', cursive;
+        font-size: 30px;
+        color: rgb(0, 0, 0);
+    }
+
+    #rangeNum{
+        font-family: 'Righteous', cursive;
+        font-size: 30px;
+        color: rgb(0, 0, 0);
+    }
+
+    #numberRange{
+        font-family: 'Righteous', cursive;
+        font-size: 20px;
+        color: rgb(0, 0, 0);
     }
 </style>
-
+<h1 class="title">Search For Vehicle</h1>
+<br>
 <form id="searchForm">
     <div>
-        <label for="Type">Enter Type</label>
-        <input type="text" name="type" placeholder="Vehicle Type">
+        <label for="type" class="inputInfo">Enter Type</label>
+        <input class="form-control" type="text" name="type" placeholder="Eg. Sedan">
     </div>
 
     <br>
     <div>
-        <label for="Model">Enter Model</label>
-        <input type="text" name="model" placeholder="Vehicle Model">
+        <label for="model" class="inputInfo">Enter Model</label>
+        <input class="form-control" type="text" name="model" placeholder="Eg. Civic">
     </div>
     <br>
 
     <div>
-        <label for="Model">Enter Year</label>
-        <input type="text" name="year" placeholder="Vehicle Year">
+        <label for="year" class="inputInfo">Enter Year</label>
+        <input class="form-control" type="text" name="year" placeholder="Eg. 2017">
     </div>
     <br>
 
     <div>
-        <label for="Model">Enter Make</label>
-        <input type="text" name="make" placeholder="Vehicle Make">
+        <label for="make" class="inputInfo">Enter Make</label>
+        <input class="form-control"  type="text" name="make" placeholder="Eg. Honda">
     </div>
     <br>
 
     
-    <label for="customRange1" class="form-label">Search Range</label>
-    <input type="range" class="form-range" min="5" max="20" name="range">
+    <label for="customRange1" class="form-label" id="rangeNum">Search Range</label>
+    <input type="range" class="form-range" min="1" max="10" name="range" id="rangeM">
+    <div id="numberRange"></div>
     <br>
 
     <input class="btn btn-secondary" type="reset" value="Reset">
@@ -80,3 +104,10 @@
 <section id="container">
 </section>
 <script src="/search_lists.js"></script>
+<script>
+    var slider = document.getElementById("rangeM");
+    slider.addEventListener('click', function(){
+        var numberRange = document.querySelector("#numberRange");
+        numberRange.innerHTML = slider.value;
+    })
+</script>

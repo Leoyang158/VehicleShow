@@ -4,10 +4,26 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Vehicle Show </title>
+        <link rel="icon" href="https://img.icons8.com/plasticine/2x/car--v2.png">
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/css/bootstrap.min.css"
             integrity="sha384-r4NyP46KrjDleawBgD5tp8Y7UzmLA05oM1iAEQ17CSuDqnUK2+k9luXQOfXJCJ4I" crossorigin="anonymous">
+            <link rel="preconnect" href="https://fonts.gstatic.com">
+            <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@100&family=Righteous&display=swap" rel="stylesheet">
         <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+        <script src="https://kit.fontawesome.com/2ef5a79693.js" crossorigin="anonymous"></script>
     </head>
+    <style>
+        body {
+        background-image: url('https://i.pinimg.com/originals/d8/91/d6/d891d656a81c3c1e4e1286fef450fac5.jpg');
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+        background-size: cover;
+        }
+        
+        *{
+            font-family: 'Righteous', cursive;
+        }
+    </style>
     <body class="d-flex flex-column vh-100">
         <%- include('../partial/navbar')%>
         <main class="container mt-5">
@@ -25,4 +41,7 @@
 
         <script src="/validationForms.js"></script>
     </body>
+    <footer class="page-footer font-small cyan darken-3" id="footer">
+        <%- include('../partial/footer')%>
+    </footer>
 </html>

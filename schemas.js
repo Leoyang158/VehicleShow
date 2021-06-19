@@ -7,6 +7,7 @@ module.exports.vehicleSchema = Joi.object({
         make: Joi.string().required(),
         model: Joi.string().required(),
         type: Joi.string().required(),
+        url: Joi.string().required(),
         description: Joi.string().required(),
     }).required()
 });
