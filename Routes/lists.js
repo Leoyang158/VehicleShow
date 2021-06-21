@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 
 const catchAsync = require('../utils/catchAsync');
-const ExpressError = require('../utils/ExpressError');
+// const ExpressError = require('../utils/ExpressError');
 
 // const { vehicleSchema } = require('../schemas.js');
 const { isLoggedIn, isAuthor, validateVehicle } = require('../middleware');
@@ -26,7 +26,7 @@ router.route('/:id')
     // updating a vehicle info
     .put(isLoggedIn, isAuthor, validateVehicle, catchAsync(lists.validateVehicle))
     // delete a vehicle page 
-    .delete(isLoggedIn, isAuthor, catchAsync (lists.deleteVehile))
+    .delete(isLoggedIn, isAuthor, catchAsync (lists.deleteVehicle));
 
     // reach to the edit page to edit the vehicle 
 router.get('/:id/edit', isLoggedIn, isAuthor, catchAsync(lists.editVehicle))

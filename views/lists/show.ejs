@@ -1,15 +1,19 @@
 <% layout('layouts/boilerplate')%>
+<link rel="stylesheet" href="\stylesheet\star.css">
+<a href="/lists" type="button" class="btn btn-outline-light">Going Back</a>
 <div class="row">
     <div class="col-6">
         <div class="card mb-3">
+                <img src="<%= car.url %>" class="card-img-top" alt="Loading">
             <div class="card-body">
-                <h3 class="card-title"><%= car.make %></h3>
+                <h3 class="card-text"><%= car.make%></h3>
+                <p class="card-title"><%= car.model %></p>
             </div>
             <ul class="list-group list-group-flush">
                 <li class="list-group-item">Car Model: <%= car.model%></li>
                 <li class="list-group-item">Car Type: <%= car.type%></li>
                 <li class="list-group-item">Car Year: <%= car.year %></li>
-                <li class="list-group-item">Submitted by <%= car.author.username %></li>
+                <li class="list-group-item">Like by <%= car.author.username %></li>
             </ul>
             <% if( currentUser && car.author.equals(currentUser._id)) { %>
             <div class="card-body">
@@ -30,11 +34,23 @@
         <h2>Leave a Review</h2>
         <form action="/lists/<%=car._id%>/reviews" method="POST" class="mb-3 validated-form" novalidate>
             <div class="mb-3">
-                <label class="form-label" for="rating">Rating</label>
-                <input class="form-range" type="range" min="1" max="5" name="review[rating]" id="rating">
+            <fieldset class="starability-heart">
+                <legend>First rating:</legend>
+                <input type="radio" id="no-rate" class="input-no-rate" name="review[rating]" value="1" checked aria-label="No rating." />
+                <input type="radio" id="first-rate1" name="review[rating]" value="1" />
+                <label for="first-rate1" title="Terrible">1 star</label>
+                <input type="radio" id="first-rate2" name="review[rating]" value="2" />
+                <label for="first-rate2" title="Not good">2 stars</label>
+                <input type="radio" id="first-rate3" name="review[rating]" value="3" />
+                <label for="first-rate3" title="Average">3 stars</label>
+                <input type="radio" id="first-rate4" name="review[rating]" value="4" />
+                <label for="first-rate4" title="Very good">4 stars</label>
+                <input type="radio" id="first-rate5" name="review[rating]" value="5" />
+                <label for="first-rate5" title="Amazing">5 stars</label>
+              </fieldset>
             </div>
             <div class="mb-3">
-                <label class="form-label" for="body">Review</label>
+                <label class="form-label" for="body">Review Comments:</label>
                 <textarea class="form-control" name="review[body]" id="body" cols="30" rows="3" required></textarea>
                 <div class="valid-feedback">
                     Looks good!
@@ -46,7 +62,10 @@
         <% for(let review of car.reviews) { %>
         <div class="card mb-3 ">
             <div class="card-body">
-                <h5 class="card-title">Rating: <%= review.rating %></h5>
+                <h3>Rated element name</h3>
+                <p class="starability-result" data-rating="<%= review.rating %>">
+                  Rated: <%= review.rating %> stars
+                </p>
                 <p class="card-text">Review: <%= review.body %></p>
                 <p class='card-subtitle mb-2 text-muted'>By <%= review.author.username %></p>
                 <% if( currentUser && review.author.equals(currentUser._id)) {%>
