@@ -12,8 +12,7 @@ To execute the file
 3. nodemon app.js or node app.js
 
 # API Included 
-Car Data API 
-Unsplash API
+Car Data API And Unsplash API
 
 # Thanks for all the supports
 
