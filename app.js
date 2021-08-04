@@ -9,10 +9,12 @@ const flash = require('connect-flash');
 const passport =  require('passport');
 const LocalStrategy = require('passport-local');
 const User = require('./models/user');
+const mongoSanitize = require('express-mongo-sanitize');
+// const helmet = require('helmet');
 //Error Async 
 const catchAsync = require('./utils/catchAsync');
 const ExpressError = require('./utils/ExpressError');
-
+require('dotenv').config();
 //middleware
 const { isLoggedIn, isAuthr, validateVehicle } = require('./middleware')
 
@@ -48,11 +50,13 @@ db.once("open", () => {
 
 
 const sessionConfig = {
+    name:'session',
     secret: "thisisbetter!",
     resave: false, // this two lines make session deprecation warning go away 
     saveUninitalized: true, 
     cookie: {
         httpOnly: true,
+        // secure: true,
         expires: Date.now() + 1000 * 60 * 60 * 24  * 7,
         maxAge: 1000 * 60 * 60 * 24  * 7 
     }
@@ -73,9 +77,11 @@ app.use(express.static('public'))
 
 app.use(methodOverride('_method'));
 
-app.use(session(sessionConfig)) //making sure it's before the passport session 
-app.use(flash())
+app.use(session(sessionConfig)); //making sure it's before the passport session 
 
+app.use(flash());
+
+app.use(mongoSanitize());
 //passport middleware (if we want persistent login session)
 app.use(passport.initialize());
 app.use(passport.session());
@@ -86,7 +92,7 @@ passport.deserializeUser(User.deserializeUser());
 
 
 app.use((req, res, next) => {
-    console.log(req.session)
+    // console.log(req.session)
     res.locals.currentUser = req.user;
     res.locals.success = req.flash('success');
     res.locals.error = req.flash('error')
